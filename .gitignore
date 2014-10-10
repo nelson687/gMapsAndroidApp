@@ -1,3 +1,4 @@
 .classpath
 .project
-
+*.class
+bin/classes/com/jammala/mapapp/*.class
