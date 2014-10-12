@@ -2,14 +2,20 @@ package com.jammala.mapapp;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -62,23 +68,30 @@ public class MainActivity extends Activity {
     public class DirectionsTask extends AsyncTask<String, Integer, String>{
 
     	private static final String DIRECTIONS_API_BASE = "https://maps.googleapis.com/maps/api/directions/json";
-    	
         private static final String API_KEY = "AIzaSyBUPTRBg0TSE4E6m02XDJpNp1fxzwX8aRw";
 
-        
+        ArrayList<DirectionsResult> results;
     	@Override
     	protected String doInBackground(String... origDest) {
     		HttpURLConnection conn = null;
     		StringBuilder jsonResults = new StringBuilder();
-    		ArrayList<String> resultList = null;
-    		
+
+            results = new ArrayList<DirectionsResult>();
     		String origin = origDest[0];
     		String destination = origDest[1];
     		StringBuilder sb = new StringBuilder(DIRECTIONS_API_BASE);
-    		sb.append("?origin=" + origin);
-    		sb.append("?destination=" + destination);
-    		sb.append("?key=" + API_KEY);
-    		
+            try {
+                String encodedOrigin = URLEncoder.encode(origin, "UTF-8");
+                String encodedDestination = URLEncoder.encode(destination, "UTF-8");
+                sb.append("?alternatives=true");
+                sb.append("&origin=" + encodedOrigin);
+                sb.append("&destination=" + encodedDestination);
+                sb.append("&key=" + API_KEY);
+            } catch (UnsupportedEncodingException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
     		URL url;
     		try {
     			url = new URL(sb.toString());
@@ -97,7 +110,7 @@ public class MainActivity extends Activity {
     		} catch (IOException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
-    		}finally {
+            }finally {
                 if (conn != null) {
                     conn.disconnect();
                 }
@@ -106,22 +119,33 @@ public class MainActivity extends Activity {
     		try {
                 // Create a JSON object hierarchy from the results
                 JSONObject jsonObj = new JSONObject(jsonResults.toString());
-                JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
+                JSONArray routesArray = jsonObj.getJSONArray("routes");
+                for(int i = 0; i<routesArray.length(); i++){
+                    JSONObject routesObject = routesArray.getJSONObject(i);
+                    JSONArray legsArray = routesObject.getJSONArray("legs");
 
-                // Extract the Place descriptions from the results
-                resultList = new ArrayList<String>(predsJsonArray.length());
-                for (int i = 0; i < predsJsonArray.length(); i++) {
-                    resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
+                    JSONObject legsObject = legsArray.getJSONObject(0);
+                    JSONObject durationObject = legsObject.getJSONObject("duration");
+                    JSONObject distanceObject = legsObject.getJSONObject("distance");
+
+                    DirectionsResult directionsResult = new DirectionsResult();
+                    directionsResult.origin = origin;
+                    directionsResult.destination = destination;
+                    directionsResult.duration = durationObject.getString("text");
+                    directionsResult.distanceText = distanceObject.getString("text");
+                    directionsResult.distanceValue = distanceObject.getLong("value");
+                    results.add(directionsResult);
                 }
             } catch (JSONException e) {
-            	//log SOMETHING
+                String test = "f";
             }
 
             return null;
         }
         
-    	protected void onPostExecute(Long result) {
-        	TextView distance = (TextView)findViewById(R.id.distance);
+        protected void onPostExecute(String result) {
+            TextView distance = (TextView)findViewById(R.id.distance);
+            distance.setText(results.get(0).distanceText);
         }
     }
 }

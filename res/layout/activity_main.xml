@@ -28,7 +28,7 @@
         android:hint="Origin" />
 
     <Button
-        android:id="@+id/b"
+        android:id="@+id/button"
         android:layout_gravity="fill_horizontal"
         android:text="@string/load_directions"
         android:onClick="getDirections" />
