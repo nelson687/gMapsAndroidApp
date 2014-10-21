@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,6 +31,10 @@ public class MainActivity extends Activity {
 
 	AutoCompleteTextView from;
 	AutoCompleteTextView to;
+    private static final String ROUTES_EXTRA = "com.jammala.app.ROUTES";
+    private static final int GET_ROUTES_CODE = 1;
+    ArrayList<DirectionsResult> results;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +75,6 @@ public class MainActivity extends Activity {
     	private static final String DIRECTIONS_API_BASE = "https://maps.googleapis.com/maps/api/directions/json";
         private static final String API_KEY = "AIzaSyBUPTRBg0TSE4E6m02XDJpNp1fxzwX8aRw";
 
-        ArrayList<DirectionsResult> results;
     	@Override
     	protected String doInBackground(String... origDest) {
     		HttpURLConnection conn = null;
@@ -144,8 +148,21 @@ public class MainActivity extends Activity {
         }
         
         protected void onPostExecute(String result) {
-            TextView distance = (TextView)findViewById(R.id.distance);
-            distance.setText(results.get(0).distanceText);
+            Intent getRoutesIntent = new Intent(getBaseContext(), RoutesList.class);
+            getRoutesIntent.putExtra(ROUTES_EXTRA, results);
+            startActivityForResult(getRoutesIntent, GET_ROUTES_CODE);
+            
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == GET_ROUTES_CODE){
+            if(resultCode == RESULT_OK){
+                DirectionsResult directionsResult = (DirectionsResult) data.getSerializableExtra(RoutesList.ROUTE_SELECTED);
+                TextView distance = (TextView)findViewById(R.id.distance);
+                distance.setText(directionsResult.distanceText);
+            }
         }
     }
 }
