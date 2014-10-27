@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,7 +32,7 @@ public class MainActivity extends Activity {
 
 	AutoCompleteTextView from;
 	AutoCompleteTextView to;
-    private static final String ROUTES_EXTRA = "com.jammala.app.ROUTES";
+    public static final String ROUTES_EXTRA = "com.jammala.app.ROUTES";
     private static final int GET_ROUTES_CODE = 1;
     ArrayList<DirectionsResult> results;
     
@@ -148,7 +149,7 @@ public class MainActivity extends Activity {
         }
         
         protected void onPostExecute(String result) {
-            Intent getRoutesIntent = new Intent(getBaseContext(), RoutesList.class);
+            Intent getRoutesIntent = new Intent(getBaseContext(), RoutesListActivity.class);
             getRoutesIntent.putExtra(ROUTES_EXTRA, results);
             startActivityForResult(getRoutesIntent, GET_ROUTES_CODE);
             
@@ -159,9 +160,10 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == GET_ROUTES_CODE){
             if(resultCode == RESULT_OK){
-                DirectionsResult directionsResult = (DirectionsResult) data.getSerializableExtra(RoutesList.ROUTE_SELECTED);
+               /* DirectionsResult directionsResult = (DirectionsResult) data.getSerializableExtra(RoutesListActivity.ROUTE_SELECTED);
                 TextView distance = (TextView)findViewById(R.id.distance);
                 distance.setText(directionsResult.distanceText);
+                */
             }
         }
     }

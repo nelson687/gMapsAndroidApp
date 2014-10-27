@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/originDestinationLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop = "true"
+        android:layout_marginTop="10dp"
+        />
+    <TextView
+        android:id="@+id/distanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/originDestinationLabel"
+        />
+    <View android:id="@+id/strut"
+        android:layout_width="0dp"
+        android:layout_height="0dp" 
+        android:layout_below="@+id/distanceLabel"
+        android:layout_centerHorizontal="true"/>
+    <Spinner
+	    android:id="@+id/carBrandSpinner"
+	    android:layout_width="0dp"
+	    android:layout_height="wrap_content" 
+	    android:layout_alignParentLeft="true"
+	    android:layout_marginTop="20dp"
+	    android:layout_below="@+id/distanceLabel"
+	    android:layout_toLeftOf="@+id/strut"
+	    />
+    <Spinner
+	    android:id="@+id/carModelSpinner"
+	    android:layout_width="0dp"
+	    android:layout_height="wrap_content" 
+	    android:layout_marginTop="20dp"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@+id/distanceLabel"
+	    android:layout_toRightOf="@+id/strut"
+	    />
+   
+    <Spinner
+	    android:id="@+id/carFuelSpinner"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content" 
+	    android:layout_below="@+id/carModelSpinner"
+	    android:layout_marginTop="20dp"
+	    android:layout_centerHorizontal="true"
+	    />
+    
+    <Button 
+        android:id="@+id/calculateBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/carFuelSpinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/calculateCost"
+        />
+    <TextView
+        android:id="@+id/litersText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" 
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/calculateBtn"
+        android:layout_toLeftOf="@+id/calculateBtn"
+        />
+    <TextView
+        android:id="@+id/costText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" 
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/calculateBtn"
+        android:layout_toRightOf="@+id/calculateBtn"
+        />
+
+</RelativeLayout>

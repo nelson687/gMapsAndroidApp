@@ -6,5 +6,9 @@
     <string name="action_settings">Settings</string>
     <string name="actionBarName">Gas map</string>
     <string name="load_directions">Go!</string>
-
+    <string name="title_activity_routes_list">RoutesList</string>
+    <string name="btnSelectText">Select this route</string>
+    <string name="btnShowDirectionsText">Show directions</string>
+    <string name="title_activity_gather_info">GatherInfoActivity</string>
+    <string name="calculateCost">Calculate cost</string>
 </resources>

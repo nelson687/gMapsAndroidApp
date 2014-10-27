@@ -1,7 +1,13 @@
 package com.jammala.mapapp;
 
-public class DirectionsResult {
+import java.io.Serializable;
 
+public class DirectionsResult implements Serializable{
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     String origin;
     String destination;
     String distanceText;
