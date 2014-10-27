@@ -53,4 +53,41 @@ public class SQLiteCarsHelper extends SQLiteAssetHelper{
         c.close();
         return models;
   }
+    public ArrayList<String> getEngines(String model){
+
+        ArrayList<String> engines = new ArrayList<String>();
+        
+        SQLiteDatabase db = getReadableDatabase();
+        
+        String sql = "SELECT e.name FROM Engine e, Model_x_Engine me WHERE e.name = ? AND e.id = me.id_model AND me.id_engine = e.id";
+        Cursor c = db.rawQuery(sql, new String[]{String.valueOf(model)});
+        if (c.moveToFirst()){
+            do{
+                
+                    engines.add(c.getString(0));
+                
+            }while(c.moveToNext());
+        }
+        c.close();
+        return engines;
+  }
+    
+    public ArrayList<String> getYears(String model, String engine){
+
+        ArrayList<String> years = new ArrayList<String>();
+        
+        SQLiteDatabase db = getReadableDatabase();
+        
+        String sql = "SELECT me.year FROM Model_x_Engine me, Engine e, Model m WHERE m.name = ? AND e.name = ? AND e.id = me.id_engine AND m.id = me.id_model";
+        Cursor c = db.rawQuery(sql, new String[]{String.valueOf(model), String.valueOf(engine)});
+        if (c.moveToFirst()){
+            do{
+                
+                years.add(c.getString(0));
+                
+            }while(c.moveToNext());
+        }
+        c.close();
+        return years;
+  }
 }

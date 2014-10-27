@@ -3,10 +3,14 @@ package com.jammala.mapapp;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,8 +38,32 @@ public class GatherInfoActivity extends Activity {
 
         sqLiteCarsHelper = new SQLiteCarsHelper(this);
         populateBrandSpinner();
-        populateModelSpinner();
         
+        Spinner brandSpinner = (Spinner) findViewById(R.id.carBrandSpinner);
+        brandSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    String selectedItem = arg0.getItemAtPosition(arg2).toString();
+                    populateModelSpinner(selectedItem);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                }
+        });
+        
+        Spinner modelSpinner = (Spinner) findViewById(R.id.carModelSpinner);
+        modelSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                String selectedItem = arg0.getItemAtPosition(arg2).toString();
+                //populateModelSpinner(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+    });
     }
 
     @Override
@@ -63,8 +91,8 @@ public class GatherInfoActivity extends Activity {
         brandSpinner.setAdapter(arrayAdapter);
     }
     
-    private void populateModelSpinner(){
-        models = sqLiteCarsHelper.getModels("Renault"); 
+    private void populateModelSpinner(String brand){
+        models = sqLiteCarsHelper.getModels(brand); 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, models);
         Spinner modelSpinner = (Spinner) findViewById(R.id.carModelSpinner);
         modelSpinner.setAdapter(arrayAdapter);

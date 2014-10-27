@@ -37,8 +37,12 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".RoutesList"
+            android:name=".RoutesListActivity"
             android:label="@string/title_activity_routes_list" >
+        </activity>
+        <activity
+            android:name=".GatherInfoActivity"
+            android:label="@string/title_activity_gather_info" >
         </activity>
     </application>
 
